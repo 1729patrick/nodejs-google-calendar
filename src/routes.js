@@ -15,7 +15,7 @@ router.use(authMiddleware);
 
 router.post('/events', EventController.store);
 router.get('/events', EventController.index);
-router.put('/events/:eventID', EventController.update);
-router.delete('/events/:eventID', EventController.delele);
+router.put('/events/:eventId', EventController.update);
+router.delete('/events/:eventId', EventController.delele);
 
 export default router;

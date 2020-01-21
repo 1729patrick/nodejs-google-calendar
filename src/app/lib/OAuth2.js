@@ -8,19 +8,17 @@ class OAuth2 {
   }
 
   init() {
-    const { client_secret, client_id, redirect_uri } = googleConfig;
-
-    this.client = new google.auth.OAuth2(
-      client_id,
-      client_secret,
-      redirect_uri
-    );
+    this.client = new google.auth.OAuth2(googleConfig);
   }
 
   setCredentials = refresh_token => {
     this.client.setCredentials({ refresh_token });
 
     google.options({ auth: this.client });
+  };
+
+  calendar = () => {
+    return google.calendar({ version: 'v3', googleConfig });
   };
 }
 

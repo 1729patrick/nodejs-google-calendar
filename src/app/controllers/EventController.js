@@ -1,30 +1,69 @@
-const { google } = require('googleapis');
-import googleConfig from '../../config/google';
-
+import { subYears } from 'date-fns';
 class EventController {
-  index(req, res) {
-    const calendar = google.calendar({ version: 'v3', googleConfig });
-    calendar.events.list(
-      {
+  async index(req, res) {
+    try {
+      const events = await req.calendar.events.list({
         calendarId: 'primary',
-        timeMin: new Date().toISOString(),
-        maxResults: 10,
+        timeMin: subYears(new Date(), 1).toISOString(),
         singleEvents: true,
         orderBy: 'startTime',
-      },
-      (err, response) => {
-        if (err) return console.log('The API returned an error: ' + err);
+      });
 
-        return res.json({ events: response.data.items });
-      }
-    );
+      return res.json({ events: events.data.items });
+    } catch (e) {
+      return res.status(400).json({ error: e.message });
+    }
   }
 
-  store(req, res) {}
+  async store(req, res) {
+    try {
+      const response = await req.calendar.events.insert({
+        calendarId: 'primary',
+        resource: req.body,
+      });
 
-  delele(req, res) {}
+      const event = response.data;
 
-  update(req, res) {}
+      return res.json({ event });
+    } catch (e) {
+      return res.status(400).json({ error: e.message });
+    }
+  }
+
+  async delele(req, res) {
+    try {
+      const { eventId } = req.params;
+
+      await req.calendar.events.delete({
+        calendarId: 'primary',
+        eventId,
+      });
+
+      return res.json({ event: 'Event deleted with success' });
+    } catch (e) {
+      return res.status(400).json({ error: e.message });
+    }
+  }
+
+  async update(req, res) {
+    try {
+      const { eventId } = req.params;
+
+      const response = await req.calendar.events.update({
+        calendarId: 'primary',
+        eventId,
+        resource: req.body,
+      });
+
+      const event = response.data;
+
+      return res.json({ event });
+    } catch (e) {
+      return res.status(400).json({ error: e.message });
+    }
+  }
 }
 
 export default new EventController();
+
+//https://developers.google.com/calendar/v3/reference/events
