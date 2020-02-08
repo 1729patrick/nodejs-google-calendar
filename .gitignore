@@ -4,3 +4,4 @@ yarn-error.log
 !*.gitkeep
 .env
 .DS_Store
+dist/
