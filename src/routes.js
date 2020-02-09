@@ -9,7 +9,7 @@ import EventController from './app/controllers/EventController';
 const router = Router();
 
 router.get('/login/:userID', LoginController.store);
-router.get('/sessions', SessionController.store);
+router.get('/sessions', SessionController.index);
 
 router.use(authMiddleware);
 

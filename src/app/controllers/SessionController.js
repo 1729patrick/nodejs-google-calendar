@@ -1,13 +1,15 @@
-import jwt from 'jsonwebtoken';
-
 import OAuth2 from '../lib/OAuth2';
 import Token from '../schemas/Token';
-
-import authConfig from '../../config/auth';
+import Token from '../schemas/Token';
 
 class SessionController {
-  async store(req, res) {
+  async index(req, res) {
     const { code, state } = req.query;
+
+    if (!code) {
+      return res.status(400).json({ error: 'Code is required' });
+    }
+
     const { userID } = JSON.parse(state);
 
     const { tokens } = await OAuth2.client.getToken(code);
@@ -17,10 +19,7 @@ class SessionController {
       refreshToken: tokens.refresh_token,
     });
 
-    const { secret, expiresIn } = authConfig;
-    const token = jwt.sign({ userID }, secret, { expiresIn });
-
-    return res.json({ token });
+    return res.send('<h1>Sincronização feita com sucesso 🥳</h1>');
   }
 }
 
