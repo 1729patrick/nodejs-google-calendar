@@ -9,7 +9,7 @@ class EventController {
         orderBy: 'startTime',
       });
 
-      return res.json({ events: events.data.items });
+      return res.json(events.data.items);
     } catch (e) {
       return res.status(400).json({ error: e.message });
     }
