@@ -18,7 +18,7 @@ export default async (req, res, next) => {
     OAuth2.setCredentials(user.refreshToken);
 
     req.calendar = OAuth2.calendar();
-
+    req.userID = userid;
     return next();
   } catch (e) {
     console.log(e);

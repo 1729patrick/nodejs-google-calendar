@@ -1,4 +1,4 @@
-import { subYears } from 'date-fns';
+import { subYears, addYears } from 'date-fns';
 class EventController {
   async index(req, res) {
     try {
@@ -7,6 +7,8 @@ class EventController {
         timeMin: subYears(new Date(), 1).toISOString(),
         singleEvents: true,
         orderBy: 'startTime',
+        maxResults: 2500,
+        timeMax: addYears(new Date(), 1).toISOString(),
       });
 
       return res.json(events.data.items);
@@ -23,8 +25,7 @@ class EventController {
       });
 
       const event = response.data;
-
-      return res.json({ event });
+      return res.json({ userID: req.userID, event });
     } catch (e) {
       return res.status(400).json({ error: e.message });
     }
@@ -39,7 +40,10 @@ class EventController {
         eventId,
       });
 
-      return res.json({ event: 'Event deleted with success' });
+      return res.json({
+        userID: req.userID,
+        event: 'Event deleted with success',
+      });
     } catch (e) {
       return res.status(400).json({ error: e.message });
     }
@@ -57,7 +61,7 @@ class EventController {
 
       const event = response.data;
 
-      return res.json({ event });
+      return res.json({ userID: req.userID, event });
     } catch (e) {
       return res.status(400).json({ error: e.message });
     }
