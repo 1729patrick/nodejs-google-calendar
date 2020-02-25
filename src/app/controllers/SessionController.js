@@ -28,6 +28,7 @@ class SessionController {
 
       return res.send('<h1>Your calendar was sync with success 🥳</h1>');
     } catch (e) {
+      console.log(e);
       return res.send('<h1>Error on sync your calendar 😢</h1>');
     }
   }
