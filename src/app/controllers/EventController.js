@@ -2,9 +2,10 @@ import { subYears, addYears } from 'date-fns';
 class EventController {
   async index(req, res) {
     try {
+      const { timeMin } = req.query;
       const events = await req.calendar.events.list({
         calendarId: 'primary',
-        timeMin: subYears(new Date(), 1).toISOString(),
+        timeMin: timeMin ? timeMin : subYears(new Date(), 1).toISOString(),
         singleEvents: true,
         orderBy: 'startTime',
         maxResults: 2500,
